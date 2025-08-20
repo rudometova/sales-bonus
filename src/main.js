@@ -10,7 +10,7 @@ function calculateSimpleRevenue(purchase, _product) {
   const discount = 1 - purchase.discount / 100;
   // выручка = цена продажи * количество * (1 - скидка)
   const revenue = purchase.sale_price * purchase.quantity * discount;
-  return revenue;
+  return +revenue.toFixed(2);
 }
 
 /**
