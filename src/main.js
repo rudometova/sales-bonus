@@ -81,11 +81,11 @@ function analyzeSalesData(data, options) {
   // Перебираем все чеки (purchase_records)
   data.purchase_records.forEach((record) => {
     // объект статистики для продавца, который оформил этот чек
-    const seller = sellerIndex[record.seller_id];
-    if (!seller) return;
+    const sellerStats = sellerIndex[record.seller_id];
+    if (!sellerStats) return;
 
     // Увеличить количество продаж
-    seller.sales_count += 1;
+    sellerStats.sales_count += 1;
 
     // Увеличить общую сумму всех продаж
     //  Расчёт прибыли для каждого товара, перебираем все товары в чеке
@@ -101,16 +101,16 @@ function analyzeSalesData(data, options) {
       // Посчитать прибыль: выручка минус себестоимость
       const profit = revenue - cost;
 
-      seller.revenue = +(seller.revenue + revenue).toFixed(2);
+      sellerStats.revenue = +(sellerStats.revenue + revenue).toFixed(2);
       // Увеличить общую накопленную прибыль (profit) у продавца
-      seller.profit += profit;
+      sellerStats.profit += profit;
 
       // Учет проданных товаров
-      if (!seller.products_sold[item.sku]) {
-        seller.products_sold[item.sku] = 0;
+      if (!sellerStats.products_sold[item.sku]) {
+        sellerStats.products_sold[item.sku] = 0;
       }
       // По артикулу товара увеличить его проданное количество у продавца
-      seller.products_sold[item.sku] += item.quantity;
+      sellerStats.products_sold[item.sku] += item.quantity;
     });
   });
 
