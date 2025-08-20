@@ -85,39 +85,31 @@ function analyzeSalesData(data, options) {
 
   // @TODO: Расчет выручки и прибыли для каждого продавца
   // Перебираем все чеки (purchase_records)
-  data.purchase_records.forEach((record) => {
-    // объект статистики для продавца, который оформил этот чек
-    const sellerStat = sellerIndex[record.seller_id];
-    if (!sellerStat) return;
-    // Увеличить количество продаж
-    sellerStat.sales_count += 1;
-    // Увеличить общую сумму всех продаж
-    //  Расчёт прибыли для каждого товара, перебираем все товары в чеке
-    
-    
-    record.items.forEach((item) => {
-      // товар в каталоге по артикулу sku
-      const product = productIndex[item.sku];
-      if (!product) return;
-      // Посчитать себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
-      const itemCost = product.purchase_price * item.quantity;
-      // Посчитать выручку (revenue) с учётом скидки через функцию calculateRevenue
-      const itemRevenue = calculateRevenue(item, product);
-      // Посчитать прибыль: выручка минус себестоимость
-      const itemProfit = itemRevenue - itemCost;
-      // Увеличить общую накопленную прибыль (profit) у продавца
-      sellerStat.profit += itemProfit;
-      sellerStat.revenue = +(sellerStat.revenue + itemRevenue).toFixed(2);
+  data.purchase_records.forEach(record => {
+		const sellerStats = sellerIndex[record.seller_id];
+		if (!sellerStats) return;
 
-      // Учёт количества проданных товаров
-      // Если артикула ещё нет в словаре, инициализируем его нулём
-      if (!sellerStat.products_sold[item.sku]) {
-        sellerStat.products_sold[item.sku] = 0;
-      }
-      // По артикулу товара увеличить его проданное количество у продавца
-      sellerStat.products_sold[item.sku] += item.quantity;     
-    });
-  });
+		sellerStats.sales_count += 1;
+
+		record.items.forEach(item => {
+			const product = productIndex[item.sku];
+			if (!product) return;
+
+			const cost = product.purchase_price * item.quantity;
+			const revenue = calculateRevenue(item, product);
+			const profit = revenue - cost;
+
+			sellerStats.revenue = +(sellerStats.revenue + revenue).toFixed(2);
+			sellerStats.profit += profit;
+
+
+			// Учет проданных товаров
+			if (!sellerStats.products_sold[item.sku]) {
+				sellerStats.products_sold[item.sku] = 0;
+			}
+			sellerStats.products_sold[item.sku] += item.quantity;
+		});
+	});
 
   // Сортируем продавцов по прибыли
   sellerStats.sort((a, b) => b.profit - a.profit);
