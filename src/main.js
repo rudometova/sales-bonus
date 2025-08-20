@@ -5,12 +5,9 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
-  // @TODO: Расчёт выручки от операции
-  // Перевести скидку из процентов в десятичное число: скидка / 100.
-  const discount = 1 - (purchase.discount || 0) / 100;
-  // выручка = цена продажи * количество * (1 - скидка)
-  const revenue = purchase.sale_price * purchase.quantity * discount;
-  return +revenue.toFixed(2);
+    const { discount, sale_price, quantity } = purchase;
+	const revenue = sale_price * quantity * (1 - (discount || 0) / 100);
+	return +revenue.toFixed(2); // Округление до сотых
 }
 
 /**
