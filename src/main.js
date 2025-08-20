@@ -106,8 +106,7 @@ function analyzeSalesData(data, options) {
       const itemRevenue = calculateRevenue(item, product);
       receiptRevenue += itemRevenue; // Суммируем выручку по чеку
       // Посчитать прибыль: выручка минус себестоимость
-      const itemProfit = itemRevenue - itemCost;
-      //const itemProfit = +(itemRevenue - itemCost).toFixed(2);
+      const itemProfit = +(itemRevenue - itemCost).toFixed(2);
       // Увеличить общую накопленную прибыль (profit) у продавца
       sellerStat.profit += itemProfit;
       // Учёт количества проданных товаров
