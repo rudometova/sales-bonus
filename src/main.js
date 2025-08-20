@@ -92,23 +92,27 @@ function analyzeSalesData(data, options) {
   data.purchase_records.forEach((record) => {
     // объект статистики для продавца, который оформил этот чек
     const sellerStat = sellerIndex[record.seller_id];
+    if (!sellerStat) return;
     // Увеличить количество продаж
     sellerStat.sales_count += 1;
     // Увеличить общую сумму всех продаж
     //  Расчёт прибыли для каждого товара, перебираем все товары в чеке
-    let receiptRevenue = 0; // Временная переменная для выручки этого чека
+    
+    
     record.items.forEach((item) => {
       // товар в каталоге по артикулу sku
       const product = productIndex[item.sku];
+      if (!product) return;
       // Посчитать себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
       const itemCost = product.purchase_price * item.quantity;
       // Посчитать выручку (revenue) с учётом скидки через функцию calculateRevenue
-      const itemRevenue = +calculateRevenue(item, product).toFixed(2); 
-      receiptRevenue += itemRevenue; // Суммируем выручку по чеку
+      const itemRevenue = calculateRevenue(item, product);
       // Посчитать прибыль: выручка минус себестоимость
       const itemProfit = itemRevenue - itemCost;
       // Увеличить общую накопленную прибыль (profit) у продавца
       sellerStat.profit += itemProfit;
+      sellerStat.revenue = +(sellerStat.revenue + itemRevenue).toFixed(2);
+
       // Учёт количества проданных товаров
       // Если артикула ещё нет в словаре, инициализируем его нулём
       if (!sellerStat.products_sold[item.sku]) {
@@ -117,7 +121,6 @@ function analyzeSalesData(data, options) {
       // По артикулу товара увеличить его проданное количество у продавца
       sellerStat.products_sold[item.sku] += item.quantity;     
     });
-     sellerStat.revenue += receiptRevenue;
   });
 
   // Сортируем продавцов по прибыли
