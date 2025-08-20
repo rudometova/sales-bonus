@@ -95,9 +95,6 @@ function analyzeSalesData(data, options) {
     // Увеличить количество продаж
     sellerStat.sales_count += 1;
     // Увеличить общую сумму всех продаж
-    // total_amount - это сумма без скидки, total_discount - общая скидка в рублях. выручка от чека = total_amount - total_discount
-    sellerStat.revenue += record.total_amount - record.total_discount;
-
     //  Расчёт прибыли для каждого товара, перебираем все товары в чеке
     let receiptRevenue = 0; // Временная переменная для выручки этого чека
     record.items.forEach((item) => {
