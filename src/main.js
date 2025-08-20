@@ -1,15 +1,13 @@
 /**
  * Функция для расчета выручки
- * @param purchase запись о покупке
- * @param _product карточка товара
+ * @param purchase запись о покупке это одна из записей в поле items из чека в data.purchase_records
+ * @param _product карточка товара это продукт из коллекции data.products
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
 	// @TODO: Расчет выручки от операции 
-	// purchase — это одна из записей в поле items из чека в data.purchase_records
-	// _product — это продукт из коллекции data.products
 	const { discount, sale_price, quantity } = purchase;
-	return sale_price * quantity * (1 - (discount || 0) / 100);
+	const revenue = sale_price * quantity * (1 - (discount || 0) / 100);
 	return +revenue.toFixed(2); // Округление до сотых
 }
 
