@@ -38,8 +38,8 @@ function calculateBonusByProfit(index, total, seller) {
   }
 
   // бонус в рублях = прибыль * процент и округляем до двух знаков после запятой
-  const bonus = (seller.profit * bonusPercent).toFixed(2);
-  return bonus;
+    const bonus = seller.profit * bonusPercentage;
+    return +bonus.toFixed(2);
 }
 
 /**
