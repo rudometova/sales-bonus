@@ -108,7 +108,7 @@ function analyzeSalesData(data, options) {
       // Посчитать прибыль: выручка минус себестоимость
       const itemProfit = itemRevenue - itemCost;
       // Увеличить общую накопленную прибыль (profit) у продавца
-      sellerStat.profit += itemProfit;
+      sellerStat.profit += +itemProfit.toFixed(2); 
       // Учёт количества проданных товаров
       // Если артикула ещё нет в словаре, инициализируем его нулём
       if (!sellerStat.products_sold[item.sku]) {
@@ -117,7 +117,7 @@ function analyzeSalesData(data, options) {
       // По артикулу товара увеличить его проданное количество у продавца
       sellerStat.products_sold[item.sku] += item.quantity;     
     });
-     sellerStat.revenue += receiptRevenue;
+     sellerStat.revenue += +receiptRevenue.toFixed(2);
   });
 
   // Сортируем продавцов по прибыли
