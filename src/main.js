@@ -5,7 +5,10 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
+  // @TODO: Расчёт выручки от операции
     const { discount, sale_price, quantity } = purchase;
+    // Перевести скидку из процентов в десятичное число: скидка / 100.
+    // выручка = цена продажи * количество * (1 - скидка)
 	const revenue = sale_price * quantity * (1 - (discount || 0) / 100);
 	return +revenue.toFixed(2); // Округление до сотых
 }
@@ -22,20 +25,17 @@ function calculateSimpleRevenue(purchase, _product) {
    0% — для продавца на последнем месте.
  */
 function calculateBonusByProfit(index, total, seller) {
-  // @TODO: Расчет бонуса от позиции в рейтинге
-  let bonusPercent;
-  if (index === 0) {
-    bonusPercent = 0.15; // 15%
-  } else if (index === 1 || index === 2) {
-    bonusPercent = 0.1; // 10%
-  } else if (index === total - 1) {
-    bonusPercent = 0; // 0%
-  } else {
-    bonusPercent = 0.05; // 5%
-  }
-  // бонус в рублях = прибыль * процент
-    const bonus = seller.profit * bonusPercent;
-    return bonus;
+    // @TODO: Расчет бонуса от позиции в рейтинге
+	const { profit } = seller;
+	if (index === 0) {
+		return seller.profit * 0.15; // для первого места
+	} else if (index === 1 || index === 2) {
+		return seller.profit * 0.1; // для второго и третьего места
+	} else if (index === total - 1) {
+		return 0; // 0 для последнего места
+	} else {
+		return seller.profit * 0.05; // 5% для всех остальных
+	}
 }
 
 /**
