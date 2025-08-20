@@ -103,7 +103,7 @@ function analyzeSalesData(data, options) {
       // Посчитать себестоимость (cost) товара как product.purchase_price, умноженную на количество товаров из чека
       const itemCost = product.purchase_price * item.quantity;
       // Посчитать выручку (revenue) с учётом скидки через функцию calculateRevenue
-      const itemRevenue = calculateRevenue(item, product);
+      const itemRevenue = +calculateRevenue(item, product).toFixed(2); 
       receiptRevenue += itemRevenue; // Суммируем выручку по чеку
       // Посчитать прибыль: выручка минус себестоимость
       const itemProfit = itemRevenue - itemCost;
